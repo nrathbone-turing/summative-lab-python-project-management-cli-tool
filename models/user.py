@@ -1,22 +1,42 @@
 from dataclasses import dataclass, field
 from typing import List, ClassVar
+import uuid
 
 @dataclass
 class User:
-    id: str
     name: str
     email: str
+    _id: str = field(default_factory=lambda: str(uuid.uuid4()))  # auto-generate UUID
     projects: List[str] = field(default_factory=list)
 
     # class-level collection
     all_users: ClassVar[List["User"]] = []
 
     def __post_init__(self):
+        self._email = None
+        # email validation
+        self.email = self.email  
         # automatically register the new user
         User.all_users.append(self)
 
-    def __str__(self):
-        return f"User({self.name}, {self.email})"
+    @property
+    def id(self): 
+        """Read-only ID"""
+        return self._id
+    
+    @id.setter
+    def id(self, _): 
+        raise AttributeError("id is immutable")
+
+    @property
+    def email(self): 
+        return self._email
+    
+    @email.setter
+    def email(self, value):
+        if "@" not in value: 
+            raise ValueError("invalid email")
+        self._email = value
 
     def add_project(self, project: str):
         """Add a project name (or later a Project object) to this user"""
@@ -30,27 +50,12 @@ class User:
         return False
     
     def __str__(self) -> str:
-        """
-        Human-readable string for CLI printing.
-        Example: "User: Alex (alex@example.com)"
-        """
+        """Human-readable string for CLI printing"""
         return f"User: {self.name} ({self.email})"
-
-    @property
-    def id(self): return self._id
-    @id.setter
-    def id(self, _): raise AttributeError("id is immutable")
-
-    @property
-    def email(self): return self._email
-    @email.setter
-    def email(self, value):
-        if "@" not in value: raise ValueError("invalid email")
-        self._email = value
 
     @classmethod
     def get_all(cls):
-        """Return all User instances."""
+        """Return all User instances"""
         return cls.all_users
     
     @classmethod
