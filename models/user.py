@@ -15,6 +15,9 @@ class User:
         # automatically register the new user
         User.all_users.append(self)
 
+    def __str__(self):
+        return f"User({self.name}, {self.email})"
+
     def add_project(self, project: str):
         """Add a project name (or later a Project object) to this user"""
         self.projects.append(project)

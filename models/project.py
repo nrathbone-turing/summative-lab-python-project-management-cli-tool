@@ -20,6 +20,9 @@ class Project:
             self.id = str(uuid.uuid4())
         Project.all_projects.append(self)
 
+    def __str__(self):
+        return f"Project({self.title})"
+
     def add_task(self, task: str):
         """Add a task to this project"""
         self.tasks.append(task)

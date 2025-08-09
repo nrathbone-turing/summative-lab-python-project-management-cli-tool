@@ -23,6 +23,10 @@ class Task:
         # register new task
         Task.all_tasks.append(self)
 
+    def __str__(self):
+        status = "✓" if self.completed else "•"
+        return f"[{status}] {self.title}" + (f" (due {self.due_date})" if self.due_date else "")
+
     def mark_complete(self):
         """Mark this task as completed"""
         self.completed = True
