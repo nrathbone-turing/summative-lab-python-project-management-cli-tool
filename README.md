@@ -17,7 +17,7 @@ A command‑line tool for managing users, projects, and tasks. Admins can create
 - Import/export CSV
 - Pretty output (tables, colors)
 
-##Data Model
+## Data Model
 - User: `id`, `name`, `email`, `projects: [Project.id]`
 
 - Project: `id`, `title`, `description`, `due_date`, `owner_user_id`, `tasks: [Task.id]`
