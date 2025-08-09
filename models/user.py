@@ -36,6 +36,18 @@ class User:
         """
         return f"User: {self.name} ({self.email})"
 
+    @property
+    def id(self): return self._id
+    @id.setter
+    def id(self, _): raise AttributeError("id is immutable")
+
+    @property
+    def email(self): return self._email
+    @email.setter
+    def email(self, value):
+        if "@" not in value: raise ValueError("invalid email")
+        self._email = value
+
     @classmethod
     def get_all(cls):
         """Return all User instances."""
