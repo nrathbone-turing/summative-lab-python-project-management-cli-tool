@@ -4,3 +4,5 @@
 # Dev/test tools
 pytest>=8.0.0
 flake8>=7.0.0
+# PyPi package to make output pretty
+rich>=13.7.0
