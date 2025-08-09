@@ -43,6 +43,14 @@ class Task:
         except ValueError:
             raise ValueError("Due date must be in YYYY-MM-DD format.")
 
+    @property
+    def due_date(self): return self._due_date
+    @due_date.setter
+    def due_date(self, value):
+        if value is not None:
+            datetime.strptime(value, "%Y-%m-%d")
+        self._due_date = value
+
     @classmethod
     def get_all(cls):
         """Return all Task instances"""
