@@ -22,8 +22,8 @@ def test_save_and_load(tmp_path, monkeypatch):
 
     # Create some test data
     u = User("Alex", "alex@example.com")
-    p = Project(id="", title="Test Project")
-    t = Task(id="", title="Test Task", project_id=p.id)
+    p = Project(title="Test Project")
+    t = Task(title="Test Task", project_id=p.id)
 
     app = App()
 
@@ -52,3 +52,34 @@ def test_save_and_load(tmp_path, monkeypatch):
     assert User.get_all()[0].name == "Alex"
     assert Project.get_all()[0].title == "Test Project"
     assert Task.get_all()[0].title == "Test Task"
+
+def test_save_and_load_preserves_ids(tmp_path, monkeypatch):
+    db_file = tmp_path / "db.json"
+    monkeypatch.setattr("python_project_management_cli_tool.store.json_store.DB_PATH", str(db_file))
+
+    # Create objects with auto-generated ids
+    u = User("Auto", "auto@example.com")
+    p = Project(title="Auto Project")
+    t = Task(title="Auto Task", project_id=p.id)
+
+    original_ids = (u.id, p.id, t.id)  # store original ids
+
+    app = App()
+    app.save()
+
+    # Clear and reload
+    User.clear_all()
+    Project.clear_all()
+    Task.all_tasks.clear()
+
+    app.load()
+
+    # Fetch loaded objects
+    loaded_u = User.get_all()[0]
+    loaded_p = Project.get_all()[0]
+    loaded_t = Task.get_all()[0]
+
+    # Assert that ids match what was originally generated
+    assert loaded_u.id == original_ids[0]
+    assert loaded_p.id == original_ids[1]
+    assert loaded_t.id == original_ids[2]
