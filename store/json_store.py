@@ -44,9 +44,37 @@ def save_all(users, projects, tasks):
     the 'id' field is included (falling back to '_id' if used internally)
     """
     _write({
-        "users": [u.__dict__ | {"id": _safe_get_id(u)} for u in users],
-        "projects": [p.__dict__ | {"id": _safe_get_id(p)} for p in projects],
-        "tasks": [t.__dict__ | {"id": _safe_get_id(t)} for t in tasks],
+        "users": [
+            {   
+                "id": _safe_get_id(u),
+                "name": getattr(u, "name", None),
+                "email": getattr(u, "email", None),
+                "projects": u.projects
+            }
+            for u in users
+        ],
+        "projects": [
+            {   
+                "id": _safe_get_id(p),
+                "title": getattr(p, "title", None),
+                "description": getattr(p, "description", ""),
+                "due_date": getattr(p, "due_date", None),
+                "owner_user_id": getattr(p, "owner_user_id", None),
+                "tasks": getattr(p, "tasks", [])
+            }
+            for p in projects
+        ],
+        "tasks": [
+            {
+                "id": _safe_get_id(t),
+                "title": getattr(t, "title", None),
+                "description": getattr(t, "description", ""),
+                "due_date": getattr(t, "due_date", None),
+                "completed": getattr(t, "completed", False),
+                "project_id": getattr(t, "project_id", None)
+            }
+            for t in tasks
+        ]
     })
 
 def load_all():
