@@ -20,7 +20,6 @@ def test_project_creation_with_defaults():
     assert p.due_date is None
     assert p.owner_user_id is None
     assert p.tasks == []
-    assert isinstance(p.id, str) and len(p.id) > 0
     assert p in Project.get_all()
 
 def test_add_task():

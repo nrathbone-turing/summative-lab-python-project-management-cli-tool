@@ -1,12 +1,12 @@
+# testing/models/test_json_store.py
 import sys
 from pathlib import Path
-
-sys.path.append(str(Path(__file__).resolve().parents[2]))
-
 import os
 import json
 import tempfile
-from pathlib import Path
+import pytest
+
+sys.path.append(str(Path(__file__).resolve().parents[2]))
 
 from python_project_management_cli_tool.store import json_store as store
 
@@ -24,7 +24,7 @@ def test_write_and_read_round_trip(tmp_path, monkeypatch):
     monkeypatch.setattr(store, "DB_PATH", str(db_file))
 
     # Write sample data
-    data = {"users": [{"id": "1", "name": "Alex"}], "projects": [], "tasks": []}
+    data = {"users": [{"_id": "1", "name": "Alex"}], "projects": [], "tasks": []}
     store._write(data)
 
     # Ensure file exists and has correct JSON
@@ -41,10 +41,10 @@ def test_save_and_load_all(tmp_path, monkeypatch):
     db_file = tmp_path / "db.json"
     monkeypatch.setattr(store, "DB_PATH", str(db_file))
 
-    # Fake dataclass-like objects
+    # Fake objects with `_id` attributes (mimicking your models now)
     class Dummy:
-        def __init__(self, id):
-            self.id = id
+        def __init__(self, _id):
+            self._id = _id
 
     users = [Dummy("u1")]
     projects = [Dummy("p1")]

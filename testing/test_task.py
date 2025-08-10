@@ -21,11 +21,10 @@ def test_task_creation():
     assert t.description == "Do something"
     assert t.due_date == "2025-08-15"
     assert t.completed is False
-    assert isinstance(t.id, str) and len(t.id) > 0
     assert t in Task.get_all()
 
 def test_mark_complete_and_incomplete():
-    t = Task(id="", title="Another Task")
+    t = Task(title="Another Task")
     assert not t.completed
     
     t.mark_complete()

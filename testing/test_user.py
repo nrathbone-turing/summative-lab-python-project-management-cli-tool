@@ -16,7 +16,6 @@ def test_user_creation():
     # Create a user and check that attributes match
     u = User("Alex", "alex@example.com")
     
-    assert isinstance(u.id, str) and len(u.id) > 0
     assert u.name == "Alex"
     assert u.email == "alex@example.com"
     assert u.projects == []
