@@ -1,3 +1,4 @@
+# models/project.py
 from dataclasses import dataclass, field
 from typing import List, Optional, ClassVar
 import uuid
