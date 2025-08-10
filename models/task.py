@@ -18,8 +18,13 @@ class Task:
     # class-level collection
     all_tasks: ClassVar[List["Task"]] = []
 
-    def __post_init__(self):       
-        # register new task
+    def __init__(self, title, description="", due_date=None, completed=False, project_id=None):
+        self._id = str(uuid.uuid4())
+        self.title = title
+        self.description = description
+        self.completed = completed
+        self.project_id = project_id
+        self.due_date = due_date
         Task.all_tasks.append(self)
 
     @property
