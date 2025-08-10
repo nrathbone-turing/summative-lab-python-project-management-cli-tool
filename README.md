@@ -55,15 +55,31 @@ The tool is built with Python dataclasses for core models, a dedicated JSON pers
   "project_id": "project_id or null"
 }
 ```
-## Example CLI
+## Example CLI Usage
+First, seed the database with demo data:
 ```
-pm add-user --name "Alex" --email "alex@example.com"
-pm list-users
-pm add-project --user "Alex" --title "CLI Tool" --desc "Project overview"
-pm add-task --project "CLI Tool" --title "Implement add-task" --due "2025-09-01"
-pm complete-task --id T-42
-pm save
-pm load
+python -m python_project_management_cli_tool.scripts.seeded_data_demo
+```
+
+Then, run CLI commands (from the project root):
+```
+# Add a user
+python -m python_project_management_cli_tool.main add-user --name "Alex"
+
+# Add a project for a user
+python -m python_project_management_cli_tool.main add-project --user "Alex" --title "CLI Tool"
+
+# Add a task to a project
+python -m python_project_management_cli_tool.main add-task --project "CLI Tool" --title "Implement add-task"
+
+# (Future) Complete a task — placeholder example
+python -m python_project_management_cli_tool.main complete-task --id T-42
+
+# Save data to JSON
+python -m python_project_management_cli_tool.main save
+
+# Load data from JSON
+python -m python_project_management_cli_tool.main load
 ```
 
 ## Repo Structure
@@ -73,21 +89,24 @@ python_project_management_cli_tool/
 ├─ requirements.txt
 ├─ python_project_management_cli_tool/
 │  ├─ __init__.py
-│  ├─ main.py                  # CLI entry point (argparse)
-│  ├─ models/                  # core data models
+│  ├─ main.py                     # CLI entry point (argparse)
+│  ├─ models/                     # core data models
 │  │  ├─ __init__.py
 │  │  ├─ user.py
 │  │  ├─ project.py
 │  │  └─ task.py
-│  ├─ store/                   # persistence (JSON I/O)
+│  ├─ store/                      # persistence (JSON I/O)
 │  │  ├─ __init__.py
 │  │  └─ json_store.py
-│  └─ services/                # app/use-case layer
+│  ├─ services/                   # app/use-case layer
+│  │  ├─ __init__.py
+│  │  └─ app.py
+│  └─ scripts/                    # helper scripts
 │     ├─ __init__.py
-│     └─ app.py
+│     └─ seeded_data_demo.py      # seeds db.json with sample data
 ├─ data/
-│  └─ db.json                  # created/updated at runtime
-└─ testing/
+│  └─ db.json                     # created/updated at runtime
+└─ testing/                       # automated tests
    ├─ test_user.py
    ├─ test_project.py
    ├─ test_task.py
@@ -122,3 +141,14 @@ python_project_management_cli_tool/
 │  task.py     │
 └──────────────┘
 ```
+
+## About This Repo
+
+### Author
+Nick Rathbone
+[GitHub Profile](https://github.com/nrathbone-turing)
+
+Note: This project is part of the Flatiron Object-Oriented Programming with Python course final assessment
+
+### License
+MIT — feel free to use or remix!
