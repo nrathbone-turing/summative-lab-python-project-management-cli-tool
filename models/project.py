@@ -4,7 +4,6 @@ import uuid
 
 @dataclass
 class Project:
-    id: str
     title: str
     description: str = ""
     due_date: Optional[str] = None  # ISO date string
@@ -34,12 +33,12 @@ class Project:
         return False
 
     @classmethod
-    def get_all(cls):
+    def get_all(cls) -> List["Project"]:
         """Return all project instances"""
         return cls.all_projects
 
     @classmethod
-    def find_by_title(cls, title: str):
+    def find_by_title(cls, title: str) -> List["Project"]:
         """Find all projects matching the given title"""
         return [p for p in cls.all_projects if p.title == title]
 
