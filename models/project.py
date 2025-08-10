@@ -22,6 +22,14 @@ class Project:
     def __str__(self):
         return f"Project({self.title})"
 
+    @property
+    def id(self):  # making id a read-only property
+        return self._id
+    
+    @id.setter
+    def id(self, _):
+        raise AttributeError("id is immutable")
+
     def add_task(self, task: str):
         """Add a task to this project"""
         self.tasks.append(task)
