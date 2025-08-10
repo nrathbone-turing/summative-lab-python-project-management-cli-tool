@@ -10,14 +10,13 @@ class Project:
     due_date: Optional[str] = None  # ISO date string
     owner_user_id: Optional[str] = None
     tasks: List[str] = field(default_factory=list)
-
+    _id: str = field(default_factory=lambda: str(uuid.uuid4()), init=False)
+    
     # Class-level list to keep track of all projects
     all_projects: ClassVar[List["Project"]] = []
 
     def __post_init__(self):
-        """Generate an ID if missing, then register this instance"""
-        if not self.id:
-            self.id = str(uuid.uuid4())
+        # register this instance
         Project.all_projects.append(self)
 
     def __str__(self):
@@ -28,9 +27,11 @@ class Project:
         self.tasks.append(task)
 
     def remove_task(self, task: str):
-        """Remove a task from this project if it exists"""
+        """Remove a task from this project if it exist; returns True if removed"""
         if task in self.tasks:
             self.tasks.remove(task)
+            return True
+        return False
 
     @classmethod
     def get_all(cls):
