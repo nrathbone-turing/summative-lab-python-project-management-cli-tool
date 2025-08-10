@@ -41,14 +41,35 @@ def test_save_and_load_all(tmp_path, monkeypatch):
     db_file = tmp_path / "db.json"
     monkeypatch.setattr(store, "DB_PATH", str(db_file))
 
-    # Fake objects with `_id` attributes (mimicking your models now)
-    class Dummy:
+    # Dummy classes with all needed attributes for save_all()
+    class DummyUser:
         def __init__(self, _id):
             self._id = _id
+            self.name = "Test User"
+            self.email = "test@example.com"
+            self.projects = []
 
-    users = [Dummy("u1")]
-    projects = [Dummy("p1")]
-    tasks = [Dummy("t1")]
+    class DummyProject:
+        def __init__(self, _id):
+            self._id = _id
+            self.title = "Test Project"
+            self.description = ""
+            self.due_date = None
+            self.owner_user_id = None
+            self.tasks = []
+
+    class DummyTask:
+        def __init__(self, _id):
+            self._id = _id
+            self.title = "Test Task"
+            self.description = ""
+            self.due_date = None
+            self.completed = False
+            self.project_id = None
+    
+    users = [DummyUser("u1")]
+    projects = [DummyProject("p1")]
+    tasks = [DummyTask("t1")]
 
     # Save and load
     store.save_all(users, projects, tasks)
