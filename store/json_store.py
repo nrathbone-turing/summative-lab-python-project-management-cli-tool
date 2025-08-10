@@ -1,3 +1,4 @@
+# store/json_store.py
 import json, os
 
 # Path to the database file — stored inside a "data" directory in the project root
@@ -28,15 +29,24 @@ def _write(data):
     with open(DB_PATH, "w") as f:
         json.dump(data, f, indent=2)  # Pretty-print JSON with 2-space indent (not specified, just my personal preference)
 
+# Added helper to safely get an object's ID without triggering AttributeError
+def _safe_get_id(obj):
+    """Return _id if present, else id if present, else None"""
+    if hasattr(obj, "_id"):
+        return getattr(obj, "_id")
+    if hasattr(obj, "id"):
+        return getattr(obj, "id")
+    return None
+
 def save_all(users, projects, tasks):
     """
     Save all users, projects, and tasks to the JSON file; converts each object to a dictionary using __dict__ and ensures
     the 'id' field is included (falling back to '_id' if used internally)
     """
     _write({
-        "users": [u.__dict__ | {"id": getattr(u, "_id", u.id)} for u in users],
-        "projects": [p.__dict__ | {"id": getattr(p, "_id", p.id)} for p in projects],
-        "tasks": [t.__dict__ | {"id": getattr(t, "_id", t.id)} for t in tasks],
+        "users": [u.__dict__ | {"id": _safe_get_id(u)} for u in users],
+        "projects": [p.__dict__ | {"id": _safe_get_id(p)} for p in projects],
+        "tasks": [t.__dict__ | {"id": _safe_get_id(t)} for t in tasks],
     })
 
 def load_all():
